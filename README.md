@@ -6,17 +6,17 @@ Este documento descreve a arquitetura e o processo de DevOps implementados para 
 
 | Requisito da Disciplina                                                                 | Atendido? | Justificativa / Evidência no Projeto Ponabri                                                                                                                                                           |
 | :-------------------------------------------------------------------------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| a) Descrever brevemente o projeto e seus objetivos                                       | Sim       | A seção "Visão Geral do Projeto Ponabri API (no Contexto de DevOps)" abaixo detalha o projeto e seus objetivos.                                                                                       |
-| b) Desenhar a Arquitetura do projeto de DevOps                                           | Sim       | O diagrama de arquitetura inserido na seção "Arquitetura de DevOps" ilustra o fluxo de CI/CD e a infraestrutura na nuvem.                                                                               |
-| c) Criar a Pipeline com Build e Deploy, e o Banco de Dados em nuvem                     | Sim       | Pipeline (`azure-pipelines.yml`) para build e deploy da API .NET funcional; Banco de Dados SQL do Azure (`PonabriDB` no servidor `ponabri-sqlserver`) criado e configurado para uso pela API na nuvem. |
-| d) Link do projeto no GitHub com fonte, arquivo YML e apresentação do Projeto (README) | Sim       | Este README, o código-fonte da API .NET (`Ponabri.Api`), e o arquivo `azure-pipelines.yml` estão disponíveis no repositório GitHub: `[COLOQUE AQUI O LINK DO SEU REPOSITÓRIO GITHUB]`                 |
-| e) Realizar testes EM NUVEM de todo projeto (vídeo)                                      | Sim       | O vídeo de demonstração (link a ser inserido) mostra o pipeline, a API rodando no Azure na URL `https://ponabriapiapp-ggdbf5fagphpfzc8.brazilsouth-01.azurewebsites.net` e a persistência de dados no Banco SQL do Azure. |
+| Descrever brevemente o projeto e seus objetivos                                       | Sim       | A seção "Visão Geral do Projeto Ponabri" abaixo detalha o projeto e seus objetivos.                                                                                       |
+| Desenhar a Arquitetura do projeto                                          | Sim       | O diagrama de arquitetura inserido na seção "Arquitetura de DevOps" ilustra o fluxo de CI/CD e a infraestrutura na nuvem.                                                                               |
+| Criar a Pipeline com Build e Deploy, e o Banco de Dados em nuvem                     | Sim       | Pipeline (`azure-pipelines.yml`) para build e deploy da API .NET funcional; Banco de Dados SQL do Azure (`PonabriDB` no servidor `ponabri-sqlserver`) criado e configurado para uso pela API na nuvem. |
+| Link do projeto no GitHub com fonte, arquivo YML e apresentação do Projeto (README) | Sim       | Este README, o código-fonte da API .NET está no `https://github.com/JMafuso/ponabri-net`, e o arquivo `azure-pipelines.yml` neste repositório, já o link para o vídeo está disponível no arquivo `.zip` da Global Solutions no `Ponabri.pdf`.                 |
+| Realizar testes EM NUVEM de todo projeto (vídeo)                                      | Sim       | O vídeo de demonstração que está no `.pdf` mostra a pipeline, a API rodando no Azure na URL `https://ponabriapiapp-ggdbf5fagphpfzc8.brazilsouth-01.azurewebsites.net` e a persistência de dados no Banco SQL da Azure. |
 
 ---
 
-## 2. Visão Geral do Projeto Ponabri API (no Contexto de DevOps)
+## 2. Visão Geral do Projeto Ponabri API
 
-A Ponabri API é o backend do sistema Ponabri, uma plataforma projetada para facilitar o gerenciamento de abrigos temporários e a coordenação de reservas em situações de emergência ou desastres naturais. Seu objetivo principal é gerenciar Usuários, Abrigos e Reservas. Para garantir a entrega contínua de novas funcionalidades e correções, foi implementado um processo de DevOps utilizando Azure Pipelines. Este processo automatiza o build da aplicação .NET, a criação de um artefato de deploy e a implantação em um ambiente de nuvem no Microsoft Azure, composto por um Azure App Service para hospedar a API e um Azure SQL Database para persistência dos dados.
+O Ponabri API é o backend do sistema Ponabri, uma plataforma projetada para facilitar o gerenciamento de abrigos temporários e a coordenação de reservas em situações de emergência ou desastres naturais. Seu objetivo principal é gerenciar Usuários, Abrigos e Reservas. Para garantir a entrega contínua de novas funcionalidades e correções, foi implementado um processo de DevOps utilizando Azure Pipelines. Este processo automatiza o build da aplicação .NET, a criação de um artefato de deploy e a implantação em um ambiente de nuvem no Microsoft Azure, composto por Azure App Service para hospedar a API e Azure SQL Database para persistência dos dados.
 
 ---
 
@@ -24,14 +24,13 @@ A Ponabri API é o backend do sistema Ponabri, uma plataforma projetada para fac
 
 A arquitetura de DevOps para o projeto Ponabri foi desenhada para um fluxo automatizado desde o controle de versão até a implantação na nuvem, integrando a API .NET com seus serviços de backend e permitindo interações com sistemas externos como o de IoT e interfaces de usuário.
 
-*Descrição da imagem: Diagrama da arquitetura de DevOps (como o que você finalizou, ex: `image_5f5c10.png`) mostrando o fluxo desde o desenvolvedor, Git, Azure Pipelines (com estágios de Build e Deploy), a API Ponabri rodando no Azure App Service (`PonabriApiApp`) conectada ao Azure SQL Database (`PonabriDB`), e as interações com a Interface do Usuário e o Sistema IoT.*
-*(Espaço reservado para a imagem do diagrama de arquitetura de DevOps)*
+![ Diagrama da arquitetura](Images/DevopsDiagram.drawio.png)
 
 **Componentes Chave da Arquitetura DevOps:**
-* **GitHub:** Repositório para o código-fonte da API .NET e o arquivo `azure-pipelines.yml`.
+* **GitHub:** Repositório para o código-fonte da API .NET.
 * **Azure Pipelines:** Orquestrador de CI/CD, responsável pelo build e deploy automatizados.
-* **Azure App Service:** Plataforma de hospedagem da API Ponabri (ex: `PonabriApiApp`).
-* **Azure SQL Database:** Banco de dados relacional (ex: `PonabriDB` no servidor `ponabri-sqlserver`) para a API.
+* **Azure App Service:** Plataforma de hospedagem da API Ponabri `PonabriApiApp`.
+* **Azure SQL Database:** Banco de dados relacional `PonabriDB` no servidor `ponabri-sqlserver` para a API.
 
 ---
 
@@ -39,28 +38,28 @@ A arquitetura de DevOps para o projeto Ponabri foi desenhada para um fluxo autom
 
 O arquivo `azure-pipelines.yml`, localizado na raiz do repositório, define o processo automatizado de build e deploy.
 
-**Fonte de Código:** O pipeline é configurado para ser acionado por pushes na branch `main` (ou outra configurada) do repositório GitHub.
+**Fonte de Código:** A pipeline é configurada para ser acionada por pushes na branch `main` do repositório GitHub.
 
-**Variáveis Principais (Definidas no YAML ou na UI do Azure DevOps):**
-* `dotnetSdkVersion`: Ex: `'8.0.x'` (especificando a versão do SDK .NET para o build, no seu caso, compatível com `8.0.410`).
-* `buildConfiguration`: Ex: `'Release'`.
-* `projectPath`: Ex: `'**/Ponabri.Api.csproj'` (caminho para o projeto da API).
-* `artifactName`: Ex: `'ponabri-api-artifact'` (nome do pacote gerado pelo build).
-* `azureSubscription`: Nome da Conexão de Serviço no Azure DevOps para autenticação com a assinatura do Azure (ex: `'AzurePonabriConnection'`).
-* `webAppName`: Nome do Azure App Service no Azure (ex: `'PonabriApiApp'`).
-* `resourceGroupName`: Nome do Resource Group no Azure onde os serviços estão (ex: `'rg-ponabri-dev'`).
+**Variáveis Principais:**
+* `dotnetSdkVersion`: `'8.0.x'`(especificando a versão do SDK .NET para a build).
+* `buildConfiguration`: `'Release'`.
+* `projectPath`: `/Ponabri.Api.csproj`(caminho para o projeto da API).
+* `artifactName`: `'ponabri-api-artifact'`(nome do pacote gerado pelo build).
+* `azureSubscription`: `'AzurePonabriConnection'`(Nome da Conexão de Serviço no Azure DevOps para autenticação com a assinatura da Azure).
+* `webAppName`: `'PonabriApiApp'`(Nome do Azure App Service na Azure ).
+* `resourceGroupName`: `'rg-ponabri-dev'`(Nome do Resource Group no Azure onde os serviços estão).
 
 **Estágio de Build (`Build .NET App`):**
 1.  **Configuração do Ambiente:** Seleciona e configura a versão correta do .NET SDK.
 2.  **Restauração de Dependências:** Executa `dotnet restore`.
 3.  **Compilação:** Executa `dotnet build --configuration $(buildConfiguration) --no-restore`.
-4.  **Publicação:** Executa `dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api --no-build` e utiliza `zipAfterPublish: true` para gerar um pacote `.zip` (ex: `Ponabri.Api.zip`).
-5.  **Publicação do Artefato:** O pacote `.zip` gerado é publicado como um artefato do pipeline (ex: `ponabri-api-artifact`).
+4.  **Publicação:** Executa `dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api --no-build` e utiliza `zipAfterPublish: true` para gerar um pacote `.zip` `Ponabri.Api.zip`.
+5.  **Publicação do Artefato:** O pacote `.zip` gerado é publicado como um artefato da pipeline `ponabri-api-artifact`.
 
 **Estágio de Deploy (`Deploy to Azure App Service`):**
 1.  **Dependência:** Este estágio é executado somente após o sucesso do estágio de Build.
 2.  **Implantação:** Utiliza a tarefa `AzureWebApp@1` para implantar o artefato (`$(Pipeline.Workspace)/$(artifactName)/Ponabri.Api.zip`) no Azure App Service.
-3.  **Configurações de Aplicativo:** As "Application Settings" do Azure App Service, como `ConnectionStrings__DefaultConnection` (para o Azure SQL Database) e as `JwtSettings` (Key, Issuer, Audience) para produção, são configuradas/atualizadas durante este estágio, lendo valores de variáveis secretas definidas no Azure Pipelines (ex: `$(ConnectionStringSQLAzure)`, `$(JwtProdKey)`).
+3.  **Configurações de Aplicativo:** As "Application Settings" do Azure App Service, como `ConnectionStrings__DefaultConnection` (para o Azure SQL Database) e as `JwtSettings` (Key, Issuer, Audience) para produção, são configuradas/atualizadas durante este estágio, lendo valores de variáveis secretas definidas no Azure Pipelines `$(ConnectionStringSQLAzure)`, `$(JwtProdKey)`.
 
 ---
 
@@ -80,10 +79,7 @@ O arquivo `azure-pipelines.yml`, localizado na raiz do repositório, define o pr
 
 ## 6. Testes em Nuvem e Vídeo de Demonstração
 
-Um vídeo de demonstração acompanha esta documentação para evidenciar o funcionamento do pipeline de CI/CD e da aplicação Ponabri API na nuvem.
-
-**(Link do Vídeo de Demonstração no YouTube)**
-`[ESPAÇO RESERVADO PARA O LINK DO SEU VÍDEO NO YOUTUBE]`
+Um vídeo de demonstração(com acesso somente através do arquivo .pdf) acompanha esta documentação para evidenciar o funcionamento do pipeline de CI/CD e da aplicação Ponabri API na nuvem.
 
 **Principais Pontos Demonstrados no Vídeo:**
 1.  **Azure DevOps:** Visualização do pipeline YAML e uma execução bem-sucedida, mostrando os logs dos estágios de Build e Deploy.
