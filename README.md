@@ -1,15 +1,23 @@
 # Ponabri API - CI/CD e Infraestrutura na Nuvem com Azure DevOps
 
-Este documento descreve a arquitetura e o processo de DevOps implementados para o projeto Ponabri API, detalhando a Integração Contínua (CI) e a Entrega Contínua (CD) utilizando Azure Pipelines para implantar a API .NET no Azure App Service com um Banco de Dados SQL do Azure.
+---
+## Nota sobre o Primeiro Acesso à API no Azure App Service (Cold Start):
 
-## 1. Checklist de Requisitos da Disciplina 'DevOps Tools & Cloud Computing' (Opção 3)
+A API Ponabri está hospedada no Azure App Service utilizando um plano que entra em estado ocioso após períodos de inatividade devido ao plano Free que não permite o "Always On" habilitado.
+
+Consequentemente, a primeira requisição a um endpoint da API (ou ao carregar o Swagger UI) após um período de inatividade ou um novo deploy pode levar um tempo maior para responder ou, resultar em um erro HTTP 500 inicial enquanto a aplicação "aquece"(processo conhecido como "cold start"). Isso ocorre porque o App Service precisa carregar a aplicação na memória, compilar o JIT e estabelecer conexões, como o banco de dados.
+
+Se você encontrar um erro 500 na primeira tentativa de acesso, por favor, aguarde alguns segundos e tente a requisição novamente. As requisições subsequentes devem responder normalmente e com a performance esperada, pois a aplicação já estará "aquecida". Este comportamento é característico do ambiente de hospedagem e não um erro na lógica da aplicação em si.
+---
+
+## 1. Checklist de Requisitos da Disciplina 'DevOps Tools & Cloud Computing'
 
 | Requisito da Disciplina                                                                 | Atendido? | Justificativa / Evidência no Projeto Ponabri                                                                                                                                                           |
 | :-------------------------------------------------------------------------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Descrever brevemente o projeto e seus objetivos                                       | Sim       | A seção "Visão Geral do Projeto Ponabri" abaixo detalha o projeto e seus objetivos.                                                                                       |
 | Desenhar a Arquitetura do projeto                                          | Sim       | O diagrama de arquitetura inserido na seção "Arquitetura de DevOps" ilustra o fluxo de CI/CD e a infraestrutura na nuvem.                                                                               |
 | Criar a Pipeline com Build e Deploy, e o Banco de Dados em nuvem                     | Sim       | Pipeline (`azure-pipelines.yml`) para build e deploy da API .NET funcional; Banco de Dados SQL do Azure (`PonabriDB` no servidor `ponabri-sqlserver`) criado e configurado para uso pela API na nuvem. |
-| Link do projeto no GitHub com fonte, arquivo YML e apresentação do Projeto (README) | Sim       | Este README, o código-fonte da API .NET está no `https://github.com/JMafuso/ponabri-net`, e o arquivo `azure-pipelines.yml` neste repositório, já o link para o vídeo está disponível no arquivo `.zip` da Global Solutions no `Ponabri.pdf`.                 |
+| Link do projeto no GitHub com fonte, arquivo YML e apresentação do Projeto (README) | Sim       | Este README, o código-fonte da API .NET está no `https://github.com/JMafuso/ponabri-net`, o arquivo `azure-pipelines.yml` neste repositório, e o link para o vídeo ´´.                 |
 | Realizar testes EM NUVEM de todo projeto (vídeo)                                      | Sim       | O vídeo de demonstração que está no `.pdf` mostra a pipeline, a API rodando no Azure na URL `https://ponabriapiapp-ggdbf5fagphpfzc8.brazilsouth-01.azurewebsites.net` e a persistência de dados no Banco SQL da Azure. |
 
 ---
@@ -20,13 +28,13 @@ O Ponabri API é o backend do sistema Ponabri, uma plataforma projetada para fac
 
 ---
 
-## 3. Arquitetura de DevOps
+## 3. Arquitetura
 
 A arquitetura de DevOps para o projeto Ponabri foi desenhada para um fluxo automatizado desde o controle de versão até a implantação na nuvem, integrando a API .NET com seus serviços de backend e permitindo interações com sistemas externos como o de IoT e interfaces de usuário.
 
 ![ Diagrama da arquitetura](Images/DevopsDiagram.drawio.png)
 
-**Componentes Chave da Arquitetura DevOps:**
+**Componentes Chave da Arquitetura:**
 * **GitHub:** Repositório para o código-fonte da API .NET.
 * **Azure Pipelines:** Orquestrador de CI/CD, responsável pelo build e deploy automatizados.
 * **Azure App Service:** Plataforma de hospedagem da API Ponabri `PonabriApiApp`.
